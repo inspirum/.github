@@ -12,7 +12,7 @@ on:
         type: string
         default: '8.5'
       coverage-php:
-        description: PHP version to collect and upload code coverage on, empty to skip
+        description: PHP version to collect and upload code coverage and run the Integration test suite on, empty to skip both
         type: string
         default: ''
 
@@ -76,8 +76,8 @@ jobs:
         run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress
       - name: Run tests
         if: matrix.php != inputs.coverage-php
-        run: vendor/bin/phpunit --no-coverage
-      - name: Run tests with coverage
+        run: vendor/bin/phpunit --no-coverage --exclude-testsuite Integration
+      - name: Run all tests with coverage
         if: matrix.php == inputs.coverage-php
         run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
       - name: Upload coverage
